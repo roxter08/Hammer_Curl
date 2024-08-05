@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
 
     public List<Sprite> cardImages; // List of card images
     public Card cardPrefab; // Prefab for the card
-    //public Transform cardParent; // Parent object to hold cards
-    private List<Card> cards = new List<Card>(); // List to hold card instances
 
     private Card firstSelectedCard;
     private Card secondSelectedCard;
@@ -30,15 +28,6 @@ public class GameManager : MonoBehaviour
             gridRoot.cellSize = new Vector3(gridRectTransform.rect.width / rows, gridRectTransform.rect.height / columns, 0);
             gridRoot.constraintCount = rows;
         }
-
-        //for (int i = 0; i < columns; i++)
-        //{
-        //    for (int j = 0; j < rows; j++)
-        //    {
-        //        GameObject cardObjects = Instantiate(card, gridRoot.transform, false);
-        //        cardObjects.GetComponent<Image>().color = Random.ColorHSV();
-        //    }
-        //}
 
         InitializeCards();
     }

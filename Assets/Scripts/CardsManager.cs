@@ -31,14 +31,6 @@ public class CardsManager : MonoBehaviour
             GameObject cardObjects = Instantiate(card, gridRoot.transform, false);
             cardObjects.GetComponent<Image>().color = Random.ColorHSV();
         }
-        //for(int i=0;i< columns;i++)
-        //{
-        //    for (int j = 0; j < rows; j++)
-        //    {
-        //        GameObject cardObjects = Instantiate(card, gridRoot.transform, false);
-        //        cardObjects.GetComponent<Image>().color = Random.ColorHSV();
-        //    }
-        //}
     }
 
     // Update is called once per frame
