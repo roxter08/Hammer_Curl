@@ -6,11 +6,6 @@ using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
-    private GameController gameController;
-    private ScoreController scoreController;
-    private ViewController viewController;
-    private GameCallbacks gameCallbacks;
-
     //Game Related Data
     [Header("GAME DATA")]
     [SerializeField] int rows;
@@ -25,23 +20,45 @@ public class Manager : MonoBehaviour
     [SerializeField] GridLayoutGroup gridRoot;
     [SerializeField] Transform gameHUD;
 
+    [Space(30)]
+
+    //Audio Related Data
+    [Header("AUDIO DATA")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip matchedAudio;
+    [SerializeField] AudioClip mismatchedAudio;
+    [SerializeField] AudioClip gameOverAudio;
+
+    private GameController gameController;
+    private ScoreController scoreController;
+    private ViewController viewController;
+    private GameCallbacks gameCallbacks;
+
+    private int totalCardsMatched;
+    private int totalNumberOfPairs;
     private void Awake()
     {
+        totalCardsMatched = 0;
+        totalNumberOfPairs = (int)((rows * columns) * 0.5f);
+
         gameCallbacks = new GameCallbacks();
         scoreController = new ScoreController();
         viewController = new ViewController(gameHUD);
         gameController = new GameController(gridRoot, rows, columns, cardImages, cardPrefab, gameCallbacks);
+        SoundManager.GetInstance().Initialize(audioSource);
     }
 
     private void OnEnable()
     {
         GameCallbacks.OnMatchFound += DoScoreUpdate;
+        GameCallbacks.OnMatchFound += CheckWinLoseCondition;
         GameCallbacks.OnTurnsUpdated += DoTurnsUpdate;
     }
 
     private void OnDisable()
     {
         GameCallbacks.OnMatchFound -= DoScoreUpdate;
+        GameCallbacks.OnMatchFound -= CheckWinLoseCondition;
         GameCallbacks.OnTurnsUpdated -= DoTurnsUpdate;
     }
 
@@ -55,14 +72,34 @@ public class Manager : MonoBehaviour
         gameController.CheckForMatch();
     }
 
-    private void DoScoreUpdate()
+    private void DoScoreUpdate(bool value)
     {
-        scoreController.UpdateScore(10);
-        viewController.DisplayNewScore(scoreController.GetScore());
+        if (value == false)
+        {
+            SoundManager.GetInstance().PlayAudio(mismatchedAudio);
+        }
+        else
+        {
+            SoundManager.GetInstance().PlayAudio(matchedAudio);
+            scoreController.UpdateScore(10);
+            viewController.DisplayNewScore(scoreController.GetScore());
+        }
     }
     private void DoTurnsUpdate()
     {
         scoreController.UpdateTurns();
         viewController.DisplayTurns(scoreController.GetTurnsTaken());
+    }
+    private void CheckWinLoseCondition(bool value) 
+    {
+        if(value == true)
+        {
+            totalCardsMatched++;
+            if (totalCardsMatched == totalNumberOfPairs)
+            {
+                Debug.Log("Game Over");
+                SoundManager.GetInstance().PlayAudio(gameOverAudio);
+            }
+        }
     }
 }

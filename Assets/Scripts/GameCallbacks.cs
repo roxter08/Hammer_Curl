@@ -2,12 +2,12 @@ using System;
 
 public class GameCallbacks
 {
-    public static event Action OnMatchFound = delegate { };
+    public static event Action<bool> OnMatchFound = delegate { };
     public static event Action OnTurnsUpdated = delegate { };
 
-    public void RaiseMatchFoundEvent()
+    public void RaiseMatchFoundEvent(bool value)
     {
-        OnMatchFound.Invoke();
+        OnMatchFound.Invoke(value);
     }
 
     public void RaiseTurnUpdateEvent()

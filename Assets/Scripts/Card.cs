@@ -3,8 +3,9 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
-    public Image cardImageComponent;
-    public Sprite cardBackImage;
+    [SerializeField] private Image cardImageComponent;
+    [SerializeField] private Sprite cardBackImage;
+    [SerializeField] private AudioClip cardFlipAudio;
 
     [HideInInspector]
     public Sprite cardImage;
@@ -25,6 +26,7 @@ public class Card : MonoBehaviour
 
         RevealCard();
         gameManager.CardSelected(this);
+        SoundManager.GetInstance().PlayAudio(cardFlipAudio);
     }
 
     public void RevealCard()

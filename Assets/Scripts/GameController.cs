@@ -91,10 +91,7 @@ public class GameController
             CardPair cardPair = cardPairsQueue.Dequeue();
             await cardPair.CheckForMatch((value)=>
             {
-                if (value.HasMatched)
-                {
-                    gameCallbacks.RaiseMatchFoundEvent();
-                }
+                gameCallbacks.RaiseMatchFoundEvent(value.HasMatched);
             });
             
             gameCallbacks.RaiseTurnUpdateEvent();
