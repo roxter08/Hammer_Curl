@@ -285,6 +285,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &829606674 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2288014132278541990, guid: 13d576f48c1854f4c9a83a0233e86cbb, type: 3}
+  m_PrefabInstance: {fileID: 7256224271167878403}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1503671151
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,8 +299,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1503671153}
-  - component: {fileID: 1503671152}
-  - component: {fileID: 1503671154}
+  - component: {fileID: 1503671155}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -303,22 +307,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1503671152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1503671151}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa49895cbf756784cb7ead376209c3ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridRoot: {fileID: 765398465}
-  card: {fileID: 7950473078514501724, guid: 7762fd5aabb7e72459e31289d879ffee, type: 3}
-  rows: 5
-  columns: 6
 --- !u!4 &1503671153
 Transform:
   m_ObjectHideFlags: 0
@@ -334,7 +322,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1503671154
+--- !u!114 &1503671155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -343,12 +331,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1503671151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3e6909604943d84dbb5d3ee24073f0d, type: 3}
+  m_Script: {fileID: 11500000, guid: cee85d00cb8e6ad43a2771e6d4bcbef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridRoot: {fileID: 765398465}
   rows: 4
   columns: 4
+  cardPrefab: {fileID: -2827531483387663152, guid: 7762fd5aabb7e72459e31289d879ffee, type: 3}
   cardImages:
   - {fileID: 21300000, guid: 8044b3204ec2bcd4e84706340513a909, type: 3}
   - {fileID: 21300000, guid: 3dad203da2538c84ba8958a9e4614144, type: 3}
@@ -370,7 +358,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d89add2f6847ee642b857eeaae11a0b5, type: 3}
   - {fileID: 21300000, guid: d23379cd5a9833146a405e935d29c9fd, type: 3}
   - {fileID: 21300000, guid: b5a2b08707745d14b95a00a6e50a1e9b, type: 3}
-  cardPrefab: {fileID: -2827531483387663152, guid: 7762fd5aabb7e72459e31289d879ffee, type: 3}
+  gridRoot: {fileID: 765398465}
+  gameHUD: {fileID: 829606674}
 --- !u!1001 &7256224271167878403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -378,6 +367,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 644785645910875415, guid: 13d576f48c1854f4c9a83a0233e86cbb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7256224271701602814, guid: 13d576f48c1854f4c9a83a0233e86cbb, type: 3}
       propertyPath: m_Color.b
       value: 0.60740364

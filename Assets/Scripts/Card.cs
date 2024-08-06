@@ -9,10 +9,10 @@ public class Card : MonoBehaviour
     [HideInInspector]
     public Sprite cardImage;
 
-    private GameManager gameManager;
+    private GameController gameManager;
     private bool isRevealed = false;
 
-    public void Initialize(Sprite image, GameManager manager)
+    public void Initialize(Sprite image, GameController manager)
     {
         cardImage = image;
         cardImageComponent.sprite = cardBackImage;

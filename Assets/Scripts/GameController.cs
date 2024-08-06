@@ -3,29 +3,36 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using System;
+using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviour
+public class GameController
 {
-    [SerializeField] GridLayoutGroup gridRoot;
-    [SerializeField] int rows;
-    [SerializeField] int columns;
+    private GridLayoutGroup gridRoot;
+    private int rows;
+    private int columns;
 
     public List<Sprite> cardImages; // List of card images
     public Card cardPrefab; // Prefab for the card
 
     private Card firstSelectedCard;
     private Card secondSelectedCard;
-
     private Queue<CardPair> cardPairsQueue;
-    private Coroutine cardPairCheckCoroutine;
+    private GameCallbacks gameCallbacks;
 
-    private void Awake()
+    public GameController(GridLayoutGroup gridLayout, int rows, int columns, List<Sprite> cardImages, Card cardPrefab, GameCallbacks gameCallbacks) 
     {
+        this.rows = rows;
+        this.columns = columns;
+        this.gridRoot = gridLayout;
+        this.cardImages = cardImages;
+        this.cardPrefab = cardPrefab;
+        this.gameCallbacks = gameCallbacks;
+
         cardPairsQueue = new Queue<CardPair>();
-        cardPairCheckCoroutine = null;
     }
 
-    private void Start()
+    public void Initialize()
     {
         RectTransform gridRectTransform = gridRoot.transform as RectTransform;
         if (rows > columns)
@@ -51,7 +58,7 @@ public class GameManager : MonoBehaviour
         List<Card> cards = new();
         for (int i = 0; i < maxCount; i++)
         {
-            GameObject cardObject = Instantiate(cardPrefab.gameObject, gridRoot.transform, false);
+            GameObject cardObject = GameObject.Instantiate(cardPrefab.gameObject, gridRoot.transform, false);
             Card card = cardObject.GetComponent<Card>();
             card.Initialize(images[i], this);
         }
@@ -71,23 +78,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        CheckForMatch();
-    }
-
     private void ResetSelectedCards()
     {
         firstSelectedCard = null;
         secondSelectedCard = null;
     }
 
-    private async void CheckForMatch()
+    public async void CheckForMatch()
     {
         for (int i = cardPairsQueue.Count - 1; i >= 0; i--)
         {
             CardPair cardPair = cardPairsQueue.Dequeue();
-            await cardPair.CheckForMatch();
+            await cardPair.CheckForMatch((value)=>
+            {
+                if (value.HasMatched)
+                {
+                    gameCallbacks.RaiseMatchFoundEvent();
+                }
+            });
+            
+            gameCallbacks.RaiseTurnUpdateEvent();
         }
     }
 
@@ -122,24 +132,34 @@ public struct CardPair
     public Card FirstCard => firstCard;
     public Card SecondCard => secondCard;
 
+    public bool HasMatched { get; private set; }
+
     public CardPair(Card firstCard, Card secondCard)
     {
         this.firstCard = firstCard;
         this.secondCard = secondCard;
+        HasMatched = false;
     }
 
-    public async Task CheckForMatch()
+    public async Task CheckForMatch(Action<CardPair> OnComplete)
     {
         await Task.Delay(500);
         if (FirstCard.cardImage == SecondCard.cardImage)
         {
             FirstCard.MatchFound();
             SecondCard.MatchFound();
+            HasMatched = true;
         }
         else
         {
             FirstCard.HideCard();
             SecondCard.HideCard();
+            HasMatched = false;
+        }
+
+        if(OnComplete != null)
+        {
+            OnComplete.Invoke(this);
         }
     }
 }
