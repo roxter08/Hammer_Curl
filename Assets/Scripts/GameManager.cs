@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,15 @@ public class GameManager : MonoBehaviour
 
     private Card firstSelectedCard;
     private Card secondSelectedCard;
+
+    private Queue<CardPair> cardPairsQueue;
+    private Coroutine cardPairCheckCoroutine;
+
+    private void Awake()
+    {
+        cardPairsQueue = new Queue<CardPair>();
+        cardPairCheckCoroutine = null;
+    }
 
     private void Start()
     {
@@ -56,27 +66,29 @@ public class GameManager : MonoBehaviour
         else if (secondSelectedCard == null && selectedCard != firstSelectedCard)
         {
             secondSelectedCard = selectedCard;
-            StartCoroutine(CheckForMatch());
+            cardPairsQueue.Enqueue(new CardPair(firstSelectedCard, secondSelectedCard));
+            ResetSelectedCards();
         }
-    } 
+    }
 
-    IEnumerator CheckForMatch()
+    private void Update()
     {
-        yield return new WaitForSeconds(1f);
+        CheckForMatch();
+    }
 
-        if (firstSelectedCard.cardImage == secondSelectedCard.cardImage)
-        {
-            firstSelectedCard.MatchFound();
-            secondSelectedCard.MatchFound();
-        }
-        else
-        {
-            firstSelectedCard.HideCard();
-            secondSelectedCard.HideCard();
-        }
-
+    private void ResetSelectedCards()
+    {
         firstSelectedCard = null;
         secondSelectedCard = null;
+    }
+
+    private async void CheckForMatch()
+    {
+        for (int i = cardPairsQueue.Count - 1; i >= 0; i--)
+        {
+            CardPair cardPair = cardPairsQueue.Dequeue();
+            await cardPair.CheckForMatch();
+        }
     }
 
     List<Sprite> Shuffle(List<Sprite> list)
@@ -100,5 +112,34 @@ public class GameManager : MonoBehaviour
             result.Add(list[randomIndex]);
         }
         return result;
+    }
+}
+
+public struct CardPair
+{
+    private Card firstCard;
+    private Card secondCard;
+    public Card FirstCard => firstCard;
+    public Card SecondCard => secondCard;
+
+    public CardPair(Card firstCard, Card secondCard)
+    {
+        this.firstCard = firstCard;
+        this.secondCard = secondCard;
+    }
+
+    public async Task CheckForMatch()
+    {
+        await Task.Delay(500);
+        if (FirstCard.cardImage == SecondCard.cardImage)
+        {
+            FirstCard.MatchFound();
+            SecondCard.MatchFound();
+        }
+        else
+        {
+            FirstCard.HideCard();
+            SecondCard.HideCard();
+        }
     }
 }
