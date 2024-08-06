@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
@@ -18,7 +19,7 @@ public class Manager : MonoBehaviour
     //UI Related Data
     [Header("UI DATA")]
     [SerializeField] GridLayoutGroup gridRoot;
-    [SerializeField] Transform gameHUD;
+    [SerializeField] Transform uiRootTransform;
 
     [Space(30)]
 
@@ -36,6 +37,7 @@ public class Manager : MonoBehaviour
 
     private int totalCardsMatched;
     private int totalNumberOfPairs;
+
     private void Awake()
     {
         totalCardsMatched = 0;
@@ -43,7 +45,7 @@ public class Manager : MonoBehaviour
 
         gameCallbacks = new GameCallbacks();
         scoreController = new ScoreController();
-        viewController = new ViewController(gameHUD);
+        viewController = new ViewController(uiRootTransform);
         gameController = new GameController(gridRoot, rows, columns, cardImages, cardPrefab, gameCallbacks);
         SoundManager.GetInstance().Initialize(audioSource);
     }
@@ -65,6 +67,20 @@ public class Manager : MonoBehaviour
     private void Start()
     {
         gameController.Initialize();
+        viewController.AddListenerOnExitButtonClicked(ExitGame);
+        viewController.AddListenerOnRestartButtonClicked(RestartGame);
+    }
+
+    
+    private void ExitGame()
+    {
+        //Exit Game
+        Application.Quit();
+    }
+    private void RestartGame()
+    {
+        //Reload Level
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void Update()
@@ -97,7 +113,7 @@ public class Manager : MonoBehaviour
             totalCardsMatched++;
             if (totalCardsMatched == totalNumberOfPairs)
             {
-                Debug.Log("Game Over");
+                viewController.DisplayGameCompletion();
                 SoundManager.GetInstance().PlayAudio(gameOverAudio);
             }
         }

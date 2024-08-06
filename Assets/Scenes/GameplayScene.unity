@@ -413,9 +413,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &829606674 stripped
+--- !u!224 &1197232283 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2288014132278541990, guid: 13d576f48c1854f4c9a83a0233e86cbb, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7256224272865890763, guid: 13d576f48c1854f4c9a83a0233e86cbb, type: 3}
   m_PrefabInstance: {fileID: 7256224271167878403}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1503671151
@@ -487,7 +487,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d23379cd5a9833146a405e935d29c9fd, type: 3}
   - {fileID: 21300000, guid: b5a2b08707745d14b95a00a6e50a1e9b, type: 3}
   gridRoot: {fileID: 765398465}
-  gameHUD: {fileID: 829606674}
+  uiRootTransform: {fileID: 1197232283}
   audioSource: {fileID: 694107637}
   matchedAudio: {fileID: 8300000, guid: f17a24ee05ec42647a688403532a8acc, type: 3}
   mismatchedAudio: {fileID: 8300000, guid: 41f2b3f52748df84e8ac5ff88011e7fa, type: 3}
