@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Manager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     //Game Related Data
     [Header("GAME DATA")]
@@ -38,8 +38,28 @@ public class Manager : MonoBehaviour
     private int totalCardsMatched;
     private int totalNumberOfPairs;
 
+    private void OnValidate()
+    {
+        ValidateProperCardCount();
+    }
+
+    /// <summary>
+    /// This function is a precaution check
+    /// If total cards are not even a pair match cannot occur
+    /// Hence the game will throw errors
+    /// </summary>
+    private void ValidateProperCardCount()
+    {
+        if ((rows * columns) % 2f != 0)
+        {
+            Debug.LogError("TOTAL NUMBER OF CARDS MUST BE EVEN FOR MATCHING \n Provide correct Row and Column values accordingly!");
+        }
+    }
+
     private void Awake()
     {
+        ValidateProperCardCount();
+
         totalCardsMatched = 0;
         totalNumberOfPairs = (int)((rows * columns) * 0.5f);
 
